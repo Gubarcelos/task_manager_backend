@@ -39,11 +39,19 @@ describe('TaskRepository', () => {
     expect(foundTask).toBeDefined();
   });
 
-  it('should find tasks within a date range', async () => {
+  it('should find tasks by user ID', async () => {
+    const user = await User.findOne({ name: 'Test User' });
+    const tasksByUserId = await TaskRepository.getTasksByUserId(user._id);
+    expect(tasksByUserId).toBeDefined();
+  });
+
+  it('should find tasks within a date range and by user ID', async () => {
+    const user = await User.findOne({ name: 'Test User' });
+    const userId = user._id;
     const startDate = new Date('2024-01-01');
     const endDate = new Date('2024-01-31');
-    const tasksInRange = await TaskRepository.findTasksByDateRange(startDate, endDate);
-    expect(tasksInRange).toBeDefined();
+    const tasksInRangeAndUser = await TaskRepository.findTasksByDateRangeAndUserId(startDate, endDate, userId);
+    expect(tasksInRangeAndUser).toBeDefined();
   });
 
   it('should get all tasks with pagination', async () => {
@@ -82,7 +90,5 @@ describe('TaskRepository', () => {
       'task not found'
     );
   });
-
-
 
 });

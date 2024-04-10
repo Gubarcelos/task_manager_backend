@@ -37,15 +37,24 @@ class TaskRepository {
         throw new Error('Error during find by id' + error.message);
       }
     }
+
+    async getTasksByUserId(userId) {
+      try {
+        return await Task.find({ user: userId }).exec();
+      } catch (error) {
+        throw new Error('Error on find task by user ' + error.message);
+      }
+    }
   
-    async findTasksByDateRange(startDate, endDate) {
+    async findTasksByDateRangeAndUserId(startDate, endDate, userId) {
       try {
         return await Task.find({
           startDate: { $gte: startDate },
-          finishDate: { $lte: endDate }
+          finishDate: { $lte: endDate },
+          user: userId
         }).exec();
       } catch (error) {
-        throw new Error('Error during task find by range date' + error.message);
+        throw new Error('Error on find task by user and range date ' + error.message);
       }
     }
   
