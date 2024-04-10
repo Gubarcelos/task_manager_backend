@@ -13,7 +13,11 @@ class UserRepository {
 
     async updateUser(userId, newData) {
         try {
-            return await User.findByIdAndUpdate(userId, newData, { new: true }).exec();
+            const updatedUser = await User.findByIdAndUpdate(userId, newData, { new: true }).exec();
+            if (!updatedUser) {
+                throw new Error('user not found'); 
+              }
+            return updatedUser
         } catch (error) {
             throw new Error('Error during user update  ' + error.message);
         }
@@ -45,7 +49,11 @@ class UserRepository {
 
     async deleteUser(userId) {
         try {
-            return await User.findByIdAndDelete(userId).exec();
+            const deletedUser = await User.findByIdAndDelete(userId).exec()
+            if (!deletedUser) {
+                throw new Error('user not found'); 
+              }
+            return deletedUser;
         } catch (error) {
             throw new Error('Error during user deletion ' + error.message);
         }
