@@ -43,10 +43,10 @@ class TaskService {
 
     async findByUserId(userId) {
         try {
-            if (!isValidObjectId(taskId)) {
+            if (!isValidObjectId(userId)) {
                 throw new Error('invalid id');
             }
-            const tasks = await TaskRepository.findByUserId(userId);
+            const tasks = await TaskRepository.getTasksByUserId(userId);
             if (!tasks) {
                 throw new Error('task not found');
             }
@@ -80,7 +80,7 @@ class TaskService {
                 throw new Error('task not found');
             }
             task.status = newStatus;
-            return await task.save();
+            return await TaskRepository.updateTask(task._id,task);
         } catch (error) {
             throw new Error('error on task status update ' + error.message);
         }

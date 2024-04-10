@@ -1,4 +1,5 @@
 const Task = require('../models/task');
+const mongoose = require('mongoose');
 
 class TaskRepository {
   async createTask(taskData) {

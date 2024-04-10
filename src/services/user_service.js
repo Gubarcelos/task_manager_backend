@@ -1,12 +1,14 @@
 const userRepository = require('../repositories/user_repository');
 const { encryptPassword } = require('../utils/password_utils');
+const mongoose = require('mongoose');
 
 class UserService {
     async createUser(userData) {
         try {
             const { password } = userData;
+            const userId = new mongoose.Types.ObjectId();
             const hashedPassword = await encryptPassword(password);
-            const newUser = { ...userData, password: hashedPassword };
+            const newUser = { ...userData,_id:userId, password: hashedPassword };
             return await userRepository.createUser(newUser);
         } catch (error) {
             throw new Error('Erro ao criar usuário: ' + error.message);
@@ -21,7 +23,10 @@ class UserService {
     }
     async updateUser(userId, newData) {
         try {
-            return await userRepository.updateUser(userId, newData);
+            const { password } = newData;
+            const hashedPassword = await encryptPassword(password);
+            const updatedUser = { ...newData, password: hashedPassword };
+            return await userRepository.updateUser(userId, updatedUser);
         } catch (error) {
             throw new Error('Erro ao atualizar usuário: ' + error.message);
         }

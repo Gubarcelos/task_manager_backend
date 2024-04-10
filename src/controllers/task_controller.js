@@ -4,7 +4,7 @@ class TaskController {
   async createTask(req, res, next) {
     try {
       const task = await TaskService.createTask(req.body);
-      res.status(204).json(task);
+      res.status(200).json(task);
     } catch (error) {
       throw new Error('Erro on task creation');
     }
@@ -31,6 +31,17 @@ class TaskController {
     }
   }
 
+  async getByUserId(req, res, next) {
+    try{
+      const userId = req.params.id;
+      const tasks = await TaskService.findByUserId(userId);
+      res.status(200).json(tasks);
+    }catch(error){
+      return error;
+    }
+
+  }
+
   async findTasksByDateRangeAndUserId(req, res, next) {
     try {
       const { startDate, endDate, userId } = req.query;
@@ -45,7 +56,7 @@ class TaskController {
     try {
       const taskId = req.params.id;
       await TaskService.deleteTask(taskId);
-      res.status(204);
+      res.status(204).json();
     } catch (error) {
       throw new Error('Error on task deletion');
     }

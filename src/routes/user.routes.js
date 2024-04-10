@@ -3,7 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/user_controller');
 const authenticateToken = require('../middleware/auth_middleware');
 
-router.post('/',authenticateToken, async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     await userController.createUser(req, res, next);
   } catch (error) {

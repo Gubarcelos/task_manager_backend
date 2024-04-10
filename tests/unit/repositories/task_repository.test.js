@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const TaskRepository = require('../../../src/repositories/task_repository');
 const Task = require('../../../src/models/task');
+const User = require('../../../src/models/user');
 require('dotenv').config();
 
 describe('TaskRepository', () => {
@@ -40,13 +41,13 @@ describe('TaskRepository', () => {
   });
 
   it('should find tasks by user ID', async () => {
-    const user = await User.findOne({ name: 'Test User' });
+    const user = await User.findOne({ name: 'Updated Test User' });
     const tasksByUserId = await TaskRepository.getTasksByUserId(user._id);
     expect(tasksByUserId).toBeDefined();
   });
 
   it('should find tasks within a date range and by user ID', async () => {
-    const user = await User.findOne({ name: 'Test User' });
+    const user = await User.findOne({ name: 'Updated Test User' });
     const userId = user._id;
     const startDate = new Date('2024-01-01');
     const endDate = new Date('2024-01-31');

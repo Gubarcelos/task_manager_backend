@@ -7,7 +7,7 @@ class UserController {
             const user = await userService.createUser(req.body);
             res.status(201).json(user);
         } catch (error) {
-            throw new Error('Error on user creation');
+            throw new Error('Error on user creation'+error.message);
         }
     }
 
@@ -21,7 +21,7 @@ class UserController {
             }
             res.json(user);
         } catch (error) {
-            throw new Error('Error on get user by id');
+            throw new Error('Error on get user by id'+error.message);
         }
     }
 

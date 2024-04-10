@@ -16,10 +16,11 @@ describe('UserRepository', () => {
   });
 
   it('should create a new user', async () => {
+    const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
     const userData = {
       _id: new mongoose.Types.ObjectId(),
       name: 'Test User',
-      email: 'test@example.com',
+      email: 'test'+randomNumber+'@example.com',
       password: 'testpassword',
     };
     const newUser = await UserRepository.createUser(userData);
@@ -27,7 +28,7 @@ describe('UserRepository', () => {
   });
 
   it('should get a user by ID', async () => {
-    const user = await User.findOne({ email: 'test@example.com' });
+    const user = await User.findOne({ name: 'Test User' });
     const foundUser = await UserRepository.getUserById(user._id);
     expect(foundUser).toBeDefined();
   });
@@ -38,7 +39,7 @@ describe('UserRepository', () => {
   });
 
   it('should update a user', async () => {
-    const user = await User.findOne({ email: 'test@example.com' });
+    const user = await User.findOne({ name: 'Test User' });
     const newData = { name: 'Updated Test User' };
     const updatedUser = await UserRepository.updateUser(user._id, newData);
     expect(updatedUser).toBeDefined();
@@ -55,7 +56,7 @@ describe('UserRepository', () => {
   });
 
   it('should delete a user', async () => {
-    const user = await User.findOne({ email: 'test@example.com' });
+    const user = await User.findOne({ name: 'Updated Test User'});
     const deletedUser = await UserRepository.deleteUser(user._id);
     expect(deletedUser).toBeDefined();
   });
