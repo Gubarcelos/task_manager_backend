@@ -41,21 +41,17 @@ class TaskService {
         }
     }
 
-    async findByUserId(userId) {
+    async findByUserId(userId, page = 1, pageSize = 10) {
         try {
-            if (!isValidObjectId(userId)) {
-                throw new Error('invalid id');
-            }
-            const tasks = await TaskRepository.getTasksByUserId(userId);
-            if (!tasks) {
-                throw new Error('task not found');
-            }
-            return tasks;
+          if (!isValidObjectId(userId)) {
+            throw new Error('invalid id');
+          }
+          const result = await TaskRepository.getTasksByUserId(userId, page, pageSize);
+          return result;
         } catch (error) {
-            throw new Error('error on find by userId ' + error.message);
+          throw new Error('error on find by userId ' + error.message);
         }
-
-    }
+      }
 
     async findTasksByDateRangeAndUserId(startDate, endDate, userId) {
         try {

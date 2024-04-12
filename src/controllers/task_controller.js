@@ -32,14 +32,20 @@ class TaskController {
   }
 
   async getByUserId(req, res, next) {
-    try{
+    try {
       const userId = req.params.id;
-      const tasks = await TaskService.findByUserId(userId);
+      const { page, pageSize } = req.query;
+  
+      const result = await TaskService.findByUserId(userId, parseInt(page), parseInt(pageSize));
+      const { tasks, totalCount } = result;
+  
+      res.setHeader('X-Page', page);
+      res.setHeader('X-Total-Count', totalCount);
+  
       res.status(200).json(tasks);
-    }catch(error){
-      return error;
+    } catch (error) {
+      next(error);
     }
-
   }
 
   async findTasksByDateRangeAndUserId(req, res, next) {

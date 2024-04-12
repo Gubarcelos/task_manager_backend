@@ -39,9 +39,21 @@ class TaskRepository {
       }
     }
 
-    async getTasksByUserId(userId) {
+    async getTasksByUserId(userId, page = 1, pageSize = 10) {
       try {
-        return await Task.find({ user: userId }).exec();
+        const tasks = await Task.find({ user: userId })
+          .skip((page - 1) * pageSize) 
+          .limit(pageSize) 
+          .exec();
+    
+        const totalCount = await Task.countDocuments({ user: userId }).exec();
+        const totalPages = Math.ceil(totalCount / pageSize);
+    
+        return {
+          tasks,
+          totalCount,
+          totalPages,
+        };
       } catch (error) {
         throw new Error('Error on find task by user ' + error.message);
       }
