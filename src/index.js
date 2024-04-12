@@ -1,12 +1,23 @@
 const express = require('express');
 const errorHandler = require('./utils/error_handler');
 require('dotenv').config();
+const cors = require('cors');
 const app = express();
 const databaseConn = require('./config/database');
 
 databaseConn();
 
 app.use(express.json());
+
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders :['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
 
 const authRoutes = require('./routes/auth.routes');
