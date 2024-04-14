@@ -1,3 +1,4 @@
+const task_repository = require('../repositories/task_repository');
 const TaskRepository = require('../repositories/task_repository');
 const { isValidObjectId } = require('mongoose');
 
@@ -43,15 +44,15 @@ class TaskService {
 
     async findByUserId(userId, page = 1, pageSize = 10) {
         try {
-          if (!isValidObjectId(userId)) {
-            throw new Error('invalid id');
-          }
-          const result = await TaskRepository.getTasksByUserId(userId, page, pageSize);
-          return result;
+            if (!isValidObjectId(userId)) {
+                throw new Error('invalid id');
+            }
+            const result = await TaskRepository.getTasksByUserId(userId, page, pageSize);
+            return result;
         } catch (error) {
-          throw new Error('error on find by userId ' + error.message);
+            throw new Error('error on find by userId ' + error.message);
         }
-      }
+    }
 
     async findTasksByDateRangeAndUserId(startDate, endDate, userId) {
         try {
@@ -59,6 +60,31 @@ class TaskService {
         } catch (error) {
             throw new Error('task not found by this user ' + error.message);
         }
+    }
+
+    async isExpired(tasks) {
+        const currentDate = new Date();
+        const updatedTasks = [];
+        for (const task of tasks) {
+            if (task.finishDate < currentDate) {
+                switch (task.status) {
+                    case 'pending':
+                    case 'in-progress':
+                        task.status = 'expired';
+                        await task.save();
+                        updatedTasks.push(task);
+                        break;
+                    case 'expired':
+                    case 'completed':
+                        updatedTasks.push(task);
+                        break;
+                }
+            }else {
+                updatedTasks.push(task)
+            }
+        }
+
+        return updatedTasks;
     }
 
     async getAllTasks(page, limit) {
@@ -76,7 +102,7 @@ class TaskService {
                 throw new Error('task not found');
             }
             task.status = newStatus;
-            return await TaskRepository.updateTask(task._id,task);
+            return await TaskRepository.updateTask(task._id, task);
         } catch (error) {
             throw new Error('error on task status update ' + error.message);
         }

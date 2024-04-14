@@ -35,13 +35,15 @@ class TaskController {
     try {
       const userId = req.params.id;
       const { page, pageSize } = req.query;
-  
+
       const result = await TaskService.findByUserId(userId, parseInt(page), parseInt(pageSize));
-      const { tasks, totalCount } = result;
-  
+      let { tasks, totalCount } = result;
+      tasks = await TaskService.isExpired(tasks);
+
+      res.header("Access-Control-Expose-Headers", "*")
       res.setHeader('X-Page', page);
       res.setHeader('X-Total-Count', totalCount);
-  
+
       res.status(200).json(tasks);
     } catch (error) {
       next(error);
