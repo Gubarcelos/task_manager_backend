@@ -6,7 +6,7 @@ class TaskController {
       const task = await TaskService.createTask(req.body);
       res.status(200).json(task);
     } catch (error) {
-      throw new Error('Erro on task creation');
+      throw error;
     }
   }
 
@@ -16,7 +16,7 @@ class TaskController {
       const task = await TaskService.getTaskById(taskId);
       res.status(200).json(task);
     } catch (error) {
-      throw new Error('Error on find task by id');
+      throw error;
     }
   }
 
@@ -27,7 +27,7 @@ class TaskController {
       const updatedTask = await TaskService.updateTask(taskId, newData);
       res.status(200).json(updatedTask);
     } catch (error) {
-      throw new Error('Error on task update');
+      throw error;
     }
   }
 
@@ -46,7 +46,7 @@ class TaskController {
 
       res.status(200).json(tasks);
     } catch (error) {
-      next(error);
+      throw error;
     }
   }
 
@@ -56,7 +56,7 @@ class TaskController {
       const tasks = await TaskService.findTasksByDateRangeAndUserId(startDate, endDate, userId);
       res.status(200).json(tasks);
     } catch (error) {
-      throw new Error('Error on found tasks by range and user');
+      throw error;
     }
   }
 
@@ -66,7 +66,7 @@ class TaskController {
       await TaskService.deleteTask(taskId);
       res.status(204).json();
     } catch (error) {
-      throw new Error('Error on task deletion');
+      throw new Error('Error on task deletion',error.message);
     }
   }
 
@@ -77,7 +77,7 @@ class TaskController {
       const updatedTask = await TaskService.changeTaskStatus(taskId, newStatus);
       res.status(200).json(updatedTask);
     } catch (error) {
-      throw new Error('Error on task status update');
+      throw error;
     }
   }
 

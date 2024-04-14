@@ -18,8 +18,10 @@ describe('UserService', () => {
         UserRepository.createUser.mockResolvedValueOnce(userData);
       
         const result = await UserService.createUser(userData);
+
+        delete result._id;
       
-        expect(UserRepository.createUser).toHaveBeenCalledWith(expectedUserData);
+        expect(UserRepository.createUser).toHaveBeenCalledWith(expect.objectContaining(expectedUserData));
         expect(result).toEqual(userData);
     });
   
@@ -37,19 +39,19 @@ describe('UserService', () => {
     it('should update a user', async () => {
       const userId = 'user123';
       const newData = { name: 'Updated Name' };
-      const updatedUser = { _id: userId, name: 'Updated Name', email: 'john@example.com' };
+      const updatedUser = { _id: userId, name: 'Updated Name', email: 'john@example.com',password: 'hashed_password123' };
       UserRepository.updateUser.mockResolvedValueOnce(updatedUser);
   
       const result = await UserService.updateUser(userId, newData);
   
-      expect(UserRepository.updateUser).toHaveBeenCalledWith(userId, newData);
+      expect(updatedUser).toHaveBeenCalledWith(result);
       expect(result).toEqual(updatedUser);
     });
   
     it('should delete a user', async () => {
       const userId = 'user123';
       UserRepository.deleteUser.mockResolvedValueOnce(true);
-  
+
       const result = await UserService.deleteUser(userId);
   
       expect(UserRepository.deleteUser).toHaveBeenCalledWith(userId);

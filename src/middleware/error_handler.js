@@ -1,4 +1,4 @@
-function errorHandler(err, req, res, next) {
+const errorHandler = (err, req, res, next) => {
     if (res.headersSent) {
         return next(err);
     }

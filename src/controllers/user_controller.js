@@ -7,7 +7,7 @@ class UserController {
             const user = await userService.createUser(req.body);
             res.status(201).json(user);
         } catch (error) {
-            throw new Error('Error on user creation'+error.message);
+            throw error;
         }
     }
 
@@ -21,7 +21,7 @@ class UserController {
             }
             res.json(user);
         } catch (error) {
-            throw new Error('Error on get user by id'+error.message);
+            throw error;
         }
     }
 
@@ -30,7 +30,7 @@ class UserController {
             const user = await userService.updateUser(req.params.id, req.body);
             res.status(200).json(user);
         } catch (error) {
-            throw new Error('Error on update user by id');
+            throw error;
         }
     }
 
@@ -39,7 +39,7 @@ class UserController {
             await userService.deleteUser(req.params.id);
             res.status(204).end();
         } catch (error) {
-            throw new Error('Error on delete user by id');
+            throw error;
         }
     }
 

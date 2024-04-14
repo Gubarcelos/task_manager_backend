@@ -1,5 +1,5 @@
 const express = require('express');
-const errorHandler = require('./utils/error_handler');
+const errorHandler = require('./middleware/error_handler');
 require('dotenv').config();
 const cors = require('cors');
 const app = express();
@@ -18,6 +18,7 @@ const corsOptions = {
   exposedHeaders :['Content-Type','X-Total-Count','X-Page', 'Authorization']
 };
 app.use(cors(corsOptions));
+
 
 
 const authRoutes = require('./routes/auth.routes');

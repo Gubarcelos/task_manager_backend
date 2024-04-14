@@ -7,7 +7,7 @@ class AuthController {
             res.setHeader('Authorization', `Bearer ${token}`);
             res.status(204).send();
         } catch (error) {
-            throw new Error(error.message);
+            throw error;
         }
     }
 }
